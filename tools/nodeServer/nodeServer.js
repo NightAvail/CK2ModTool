@@ -25,6 +25,14 @@ app.get('/', function(req, res) {
     });
 });
 
+app.post('/create-project', function(req, res) {
+    var data = {};
+    data.id = 0;
+
+    res.setHeader('Content-Type', 'application/json');
+    res.setHeader('Content-Length', JSON.stringify(data).length);
+});
+
 app.listen(8081, function() {
     console.log('NodeJS Server running on port 8081');
     console.log('Website can be reached at http://localhost:8081');

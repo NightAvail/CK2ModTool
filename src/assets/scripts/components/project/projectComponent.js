@@ -1,19 +1,19 @@
-define(function(require, exports, module) { // jshint ignore:line
+define(function(require) { // jshint ignore:line
     'use strict';
 
     var $ = require('jquery');
 
-    var startupTemplate = require('text!./startupTemplate.html');
-    var NewProjectComponent = require('./newProjectComponent');
+    var ProjectView = require('./views/projectView');
+    var ProjectService = require('./../services/projectService');
 
     /**
-     * The Project view class.
+     * The new project component class.
      *
-     * @class ProjectView
+     * @class ProjectComponent
      * @param {jQuery<HTMLObject>} $element
      * @constructor
      */
-    var ProjectView = function($element) {
+    var ProjectComponent = function($element) {
         /**
          * The DOM element the component is attached too.
          *
@@ -34,7 +34,7 @@ define(function(require, exports, module) { // jshint ignore:line
         this.init();
     };
 
-    var proto = ProjectView.prototype;
+    var proto = ProjectComponent.prototype;
 
     /**
      * Initializes all the view. This method should setup all
@@ -63,6 +63,8 @@ define(function(require, exports, module) { // jshint ignore:line
      * @private
      */
     proto.setupEventHandlers = function() {
+        this.newProjectEventHandler = this.onNewProjectEvent.bind(this);
+
         return this;
     };
 
@@ -75,7 +77,8 @@ define(function(require, exports, module) { // jshint ignore:line
      * @private
      */
     proto.setupChildren = function() {
-        this.newProjectComponent = new NewProjectComponent();
+        this.$window = $(window);
+        this.projectService = new ProjectService();
 
         return this;
     };
@@ -88,9 +91,6 @@ define(function(require, exports, module) { // jshint ignore:line
      * @private
      */
     proto.removeChildren = function() {
-        this.newProjectComponent.destroy();
-        this.newProjectComponent = null;
-
         return this;
     };
 
@@ -102,12 +102,6 @@ define(function(require, exports, module) { // jshint ignore:line
      * @private
      */
     proto.setupLayout = function() {
-        if (this.$element == null) {
-            this.$element = $('.searchView');
-        }
-
-        this.$element.html(startupTemplate);
-
         return this;
     };
 
@@ -123,7 +117,7 @@ define(function(require, exports, module) { // jshint ignore:line
             return this;
         }
 
-        this.newProjectComponent.enable();
+        this.$window.on('newProject', this.newProjectEventHandler);
 
         this.isEnabled = true;
         return this;
@@ -142,7 +136,7 @@ define(function(require, exports, module) { // jshint ignore:line
             return this;
         }
 
-        this.newProjectComponent.disable();
+        this.$window.off('newProject', this.newProjectEventHandler);
 
         this.isEnabled = false;
         return this;
@@ -164,9 +158,24 @@ define(function(require, exports, module) { // jshint ignore:line
     // EVENTS
     ///////////////////////////////////////////////////////////////////////////
 
+    /**
+     * Handles a new project event.
+     *
+     * @method onNewProjectEvent
+     */
+    proto.onNewProjectEvent = function() {
+        var projectName = $('input.projectName').val();
+
+        if (projectName != null) {
+            this.projectService.newProject();
+        } else {
+            // dialog.message('Cannot create a project without a project name');
+        }
+    };
+
     ///////////////////////////////////////////////////////////////////////////
     // HELPERS
     ///////////////////////////////////////////////////////////////////////////
 
-    return ProjectView;
+    return ProjectComponent;
 });
