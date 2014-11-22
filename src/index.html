@@ -1,0 +1,84 @@
+<!doctype html>
+<html class="no-js" lang="en-us">
+    <head>
+        <!-- Meta Header -->
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <!--[if IE]><meta http-equiv="cleartype" content="on" /><![endif]-->
+        <!-- End Meta Header -->
+
+        <title>CK2 Mod Tool</title>
+
+        <!-- Stylesheets -->
+        <link rel="stylesheet" media="screen, projection" href="<%= _gulpAssetsDir %>/css/main<%= _gulpCssSuffix %>" />
+        <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
+        <!--[if IE 9]><link rel="stylesheet" media="screen, projection" href="<%= _gulpAssetsDir %>/css/ie9-fixes.min.css" /><![endif]-->
+        <!-- End Stylesheets -->
+    </head>
+
+    <body>
+        <!-- Application Start -->
+        <div class="app-view"></div>
+        <!-- End Application -->
+
+        <!-- Application Settings -->
+        <script src="<%= _gulpAssetsDir %>/vendors/requirejs/require.js"></script>
+        <script src="<%= _gulpAssetsDir %>/scripts/config.js"></script>
+        <%= _gulpCompiledJSMainFile %>
+        <script>
+            /**
+             * The CONFIG global class is the base class that contains all
+             * other global settings. This allows for easy access to those
+             * variables in our application components.
+             *
+             * @class CONFIG
+             * @static
+             */
+            window.CONFIG = {};
+
+            /**
+             * The version number of the application.
+             *
+             * @property VERSION
+             * @type String
+             * @final
+             */
+            CONFIG.VERSION = '<%= _gulpProjectVersion %>';
+
+            /**
+             * Flag that lets us know if we are in a production environment.
+             *
+             * @property PRODUCTION
+             * @type Boolean
+             * @final
+             */
+            CONFIG.PRODUCTION = <%= _gulpIsProduction %>;
+
+            /**
+             * The path to our application script files.
+             *
+             * @property SCRIPT_PATH
+             * @type String
+             * @final
+             */
+            CONFIG.SCRIPT_PATH = '<%= _gulpAssetsDir %>/scripts/';
+
+            /**
+             * The RequireJS configuration. These configurations are in
+             * addition to the to the configuration setup in the config.js
+             * script.
+             */
+             require.config({
+                 baseUrl: CONFIG.SCRIPT_PATH,
+                 urlArgs: 'v=' + CONFIG.VERSION + (CONFIG.PRODUCTION ? '' :
+                               '&id=' + Math.random())
+             });
+
+             /**
+              * Kick-off our requirejs application.
+              */
+             require(['main']);
+        </script>
+        <!-- End Application Settings -->
+    </body>
+</html>
