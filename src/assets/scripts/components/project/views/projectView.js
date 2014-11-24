@@ -143,6 +143,8 @@ define(function(require) { // jshint ignore:line
      * @private
      */
     proto.destroy = function() {
+        startupTemplate = null;
+
         return this;
     };
 

@@ -4,7 +4,7 @@ define(function(require, exports, module) { // jshint ignore:line
     require('bind-polyfill');
 
     var $ = require('jquery');
-    var ProjectView = require('./components/projectComponent');
+    var ProjectComponent = require('./components/project/projectComponent');
 
     /**
      * The App class acts as the core bootstrap class for
@@ -52,7 +52,7 @@ define(function(require, exports, module) { // jshint ignore:line
      */
     proto.setupChildren = function() {
         var $element = $('.app-view');
-        this.addView('ProjectComponent', new ProjectComponent($element));
+        this.addComponent('ProjectComponent', new ProjectComponent($element));
         return this;
     };
 
@@ -63,12 +63,12 @@ define(function(require, exports, module) { // jshint ignore:line
     /**
      * Adds a view to the application.
      *
-     * @method addView
+     * @method addComponent
      * @params {String} componentName
-     * @params {object} view
+     * @params {Object} component
      * @returns {App}
      */
-    proto.addView = function(componentName, component) {
+    proto.addComponent = function(componentName, component) {
         if (this.components[componentName] != null) {
             component = null;
             return this;

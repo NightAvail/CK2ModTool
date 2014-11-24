@@ -1,0 +1,7 @@
+{
+    "cmd": "gulp",
+    "sh": true,
+    "cwd": "/Users/victorholt/Documents/Projects/CK2ModTool/",
+    "env": {
+    }
+}

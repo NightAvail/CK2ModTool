@@ -4,7 +4,9 @@ define(function(require) { // jshint ignore:line
     var $ = require('jquery');
 
     var ProjectView = require('./views/projectView');
-    var ProjectService = require('./../services/projectService');
+    var NewProjectView = require('./views/newProjectView');
+
+    var ProjectService = require('services/projectService');
 
     /**
      * The new project component class.
@@ -30,6 +32,14 @@ define(function(require) { // jshint ignore:line
          * @type Boolean
          */
         this.isEnabled = false;
+
+        /**
+         * The current view being rendered.
+         *
+         * @property currentView
+         * @type Object
+         */
+        this.currentView = null;
 
         this.init();
     };
@@ -79,6 +89,7 @@ define(function(require) { // jshint ignore:line
     proto.setupChildren = function() {
         this.$window = $(window);
         this.projectService = new ProjectService();
+        this.currentView = new ProjectView(this.$element);
 
         return this;
     };
@@ -164,13 +175,22 @@ define(function(require) { // jshint ignore:line
      * @method onNewProjectEvent
      */
     proto.onNewProjectEvent = function() {
-        var projectName = $('input.projectName').val();
+        // We want to destroy the current view and load up the
+        // create new project view.
+        this.currentView.transition(function() {
+            this.currentView.destroy();
+            this.currentView = null;
+        });
 
-        if (projectName != null) {
-            this.projectService.newProject();
-        } else {
-            // dialog.message('Cannot create a project without a project name');
-        }
+        this.currentView = new NewProjectView(this.$element);
+
+        // var projectName = $('input.projectName').val();
+
+        // if (projectName != null) {
+        //     this.projectService.newProject();
+        // } else {
+        //     dialog.message('Cannot create a project without a project name');
+        // }
     };
 
     ///////////////////////////////////////////////////////////////////////////

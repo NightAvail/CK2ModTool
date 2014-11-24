@@ -27,6 +27,7 @@ define(function(require) {
      * @chainable
      */
     proto.save = function() {
+        console.log('saving in progress');
         return this;
     };
 

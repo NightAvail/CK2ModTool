@@ -10,7 +10,10 @@ require.config({
         'requirejs': './../vendors/requirejs/require',
         'text': './../vendors/requirejs-text/text',
         'bind-polyfill': './../vendors/bind-polyfill/bind.polyfill',
-        'jquery': './../vendors/jquery/dist/jquery.min'
+        'jquery': './../vendors/jquery/dist/jquery.min',
+        'services': './services',
+        'components': './components',
+        'models': './models'
     },
 
     shim: {
